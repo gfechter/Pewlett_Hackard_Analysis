@@ -93,3 +93,88 @@ FROM mentorship_eligibility;
 
 SELECT COUNT (emp_no)
 FROM employees;
+
+
+-- Additional Queries
+
+-- Retirees by Department
+SELECT DISTINCT ON (emp_no) rt.emp_no,
+d.dept_name
+INTO dept_retirement
+FROM retirement_titles AS rt
+INNER JOIN department_employees AS de 
+ON (rt.emp_no=de.emp_no)
+INNER JOIN departments AS d 
+ON (de.dept_no=d.dept_no)
+WHERE (rt.to_date = '9999-01-01')
+ORDER BY rt.emp_no;
+
+SELECT COUNT (emp_no),
+dept_name
+INTO dept_retirees
+FROM dept_retirement
+GROUP BY dept_name
+ORDER BY COUNT (emp_no) DESC;
+
+SELECT * FROM dept_retirees;
+
+-- Employees eligible for retirement between now and the end of 2025
+SELECT DISTINCT ON (emp_no) e.emp_no,
+e.first_name,
+e.last_name,
+ti.title,
+ti.from_date,
+ti.to_date
+INTO future_eligible_retirees
+FROM employees as e
+INNER JOIN titles as ti
+ON (e.emp_no = ti.emp_no)
+WHERE (birth_date BETWEEN '1956-01-01' AND '1956-12-31')
+AND (to_date = '9999-01-01')
+ORDER BY e.emp_no;
+
+SELECT * FROM future_eligible_retirees;
+
+SELECT COUNT (emp_no)
+FROM future_eligible_retirees;
+
+SELECT DISTINCT ON (emp_no) e.emp_no,
+e.first_name,
+e.last_name,
+ti.title,
+ti.from_date,
+ti.to_date
+INTO future_eligible_retirement
+FROM employees as e
+INNER JOIN titles as ti
+ON (e.emp_no = ti.emp_no)
+WHERE (birth_date BETWEEN '1957-01-01' AND '1957-12-31')
+AND (to_date = '9999-01-01')
+ORDER BY e.emp_no;
+
+SELECT * FROM future_eligible_retirement;
+
+SELECT COUNT (emp_no)
+FROM future_eligible_retirement;
+
+SELECT COUNT (emp_no)
+FROM future_eligible_retirees;
+
+SELECT DISTINCT ON (emp_no) e.emp_no,
+e.first_name,
+e.last_name,
+ti.title,
+ti.from_date,
+ti.to_date
+INTO future_retirement_58
+FROM employees as e
+INNER JOIN titles as ti
+ON (e.emp_no = ti.emp_no)
+WHERE (birth_date BETWEEN '1958-01-01' AND '1958-12-31')
+AND (to_date = '9999-01-01')
+ORDER BY e.emp_no;
+
+SELECT * FROM future_retirement_58;
+
+SELECT COUNT (emp_no)
+FROM future_retirement_58;
